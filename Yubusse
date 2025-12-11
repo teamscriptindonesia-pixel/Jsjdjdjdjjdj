@@ -1,0 +1,336 @@
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+
+local LocalPlayer = Players.LocalPlayer
+local Camera = Workspace.CurrentCamera
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "FeamzHubV1Mini"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = game:GetService("CoreGui")
+
+-- === MAIN GUI ===
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 320, 0, 360)
+MainFrame.Position = UDim2.new(0.5, -160, 1.5, 0)
+MainFrame.BackgroundColor3 = Color3.fromRGB(80, 0, 150)
+MainFrame.BorderSizePixel = 0
+MainFrame.ClipsDescendants = true
+MainFrame.Parent = ScreenGui
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 18)
+
+-- TITLE
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Size = UDim2.new(1, 0, 0, 45)
+TitleLabel.BackgroundColor3 = Color3.fromRGB(110, 0, 200)
+TitleLabel.Text = "Feamz Hub v1"
+TitleLabel.TextColor3 = Color3.new(1,1,1)
+TitleLabel.TextScaled = true
+TitleLabel.Font = Enum.Font.GothamBlack
+TitleLabel.Parent = MainFrame
+Instance.new("UICorner", TitleLabel).CornerRadius = UDim.new(0, 18)
+
+-- CLOSE BUTTON
+local CloseBtn = Instance.new("TextButton")
+CloseBtn.Size = UDim2.new(0, 35, 0, 35)
+CloseBtn.Position = UDim2.new(1, -45, 0, 5)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(200,0,0)
+CloseBtn.Text = "X"
+CloseBtn.TextColor3 = Color3.new(1,1,1)
+CloseBtn.TextScaled = true
+CloseBtn.Parent = TitleLabel
+Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0,10)
+
+-- TAB FRAME
+local TabFrame = Instance.new("Frame")
+TabFrame.Size = UDim2.new(1, 0, 0, 35)
+TabFrame.Position = UDim2.new(0, 0, 0, 45)
+TabFrame.BackgroundTransparency = 1
+TabFrame.Parent = MainFrame
+
+local Tabs = {"Exe", "Script", "View", "Setting"}
+local TabButtons = {}
+local TabContents = {}
+
+for i, name in ipairs(Tabs) do
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0.25, 0, 1, 0)
+    btn.Position = UDim2.new((i-1)*0.25, 0, 0, 0)
+    btn.BackgroundColor3 = Color3.fromRGB(130, 0, 220)
+    btn.Text = name
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.TextScaled = true
+    btn.Font = Enum.Font.GothamBold
+    btn.Parent = TabFrame
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 10)
+    TabButtons[name] = btn
+end
+
+local Content = Instance.new("Frame")
+Content.Size = UDim2.new(1, -20, 1, -90)
+Content.Position = UDim2.new(0, 10, 0, 85)
+Content.BackgroundTransparency = 1
+Content.Parent = MainFrame
+
+-- === EXE TAB ===
+local ExeTab = Instance.new("Frame")
+ExeTab.Size = UDim2.new(1,0,1,0)
+ExeTab.BackgroundTransparency = 1
+ExeTab.Visible = true
+ExeTab.Parent = Content
+
+local TextBox = Instance.new("TextBox")
+TextBox.Size = UDim2.new(1, -20, 0.7, 0)
+TextBox.Position = UDim2.new(0, 10, 0, 5)
+TextBox.BackgroundColor3 = Color3.fromRGB(50, 0, 100)
+TextBox.PlaceholderText = "Paste script here..."
+TextBox.Text = ""
+TextBox.MultiLine = true
+TextBox.TextScaled = true
+TextBox.Font = Enum.Font.Code
+TextBox.TextColor3 = Color3.new(1,1,1)
+TextBox.Parent = ExeTab
+Instance.new("UICorner", TextBox).CornerRadius = UDim.new(0, 12)
+
+local PlayBtn = Instance.new("TextButton")
+PlayBtn.Size = UDim2.new(0.9, 0, 0, 40)
+PlayBtn.Position = UDim2.new(0.05, 0, 0.75, 0)
+PlayBtn.BackgroundColor3 = Color3.fromRGB(0, 220, 0)
+PlayBtn.Text = "PLAY"
+PlayBtn.TextScaled = true
+PlayBtn.TextColor3 = Color3.new(1,1,1)
+PlayBtn.Font = Enum.Font.GothamBold
+PlayBtn.Parent = ExeTab
+Instance.new("UICorner", PlayBtn).CornerRadius = UDim.new(0, 12)
+
+PlayBtn.MouseButton1Click:Connect(function()
+	loadstring(TextBox.Text)()
+end)
+
+-- === SCRIPT TAB ===
+local ScriptTab = Instance.new("Frame")
+ScriptTab.Size = UDim2.new(1,0,1,0)
+ScriptTab.BackgroundTransparency = 1
+ScriptTab.Visible = false
+ScriptTab.Parent = Content
+
+local cs = Instance.new("TextLabel")
+cs.Size = UDim2.new(1,0,1,0)
+cs.BackgroundTransparency = 1
+cs.Text = "Coming soon (v2)"
+cs.TextScaled = true
+cs.TextColor3 = Color3.new(1,1,1)
+cs.Font = Enum.Font.GothamBold
+cs.Parent = ScriptTab
+
+-- === VIEW TAB ===
+local ViewTab = Instance.new("Frame")
+ViewTab.Size = UDim2.new(1,0,1,0)
+ViewTab.BackgroundTransparency = 1
+ViewTab.Visible = false
+ViewTab.Parent = Content
+
+local Scroll = Instance.new("ScrollingFrame")
+Scroll.Size = UDim2.new(1, -20, 1, -10)
+Scroll.Position = UDim2.new(0, 10, 0, 5)
+Scroll.BackgroundColor3 = Color3.fromRGB(60, 0, 120)
+Scroll.ScrollBarThickness = 6
+Scroll.Parent = ViewTab
+Instance.new("UICorner", Scroll).CornerRadius = UDim.new(0, 12)
+
+local Layout = Instance.new("UIListLayout")
+Layout.Padding = UDim.new(0, 6)
+Layout.Parent = Scroll
+
+Layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    Scroll.CanvasSize = UDim2.new(0,0,0, Layout.AbsoluteContentSize.Y + 10)
+end)
+
+local function UpdatePlayers()
+    for _,v in pairs(Scroll:GetChildren()) do
+        if v:IsA("Frame") then v:Destroy() end
+    end
+
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer and plr.Character then
+            local f = Instance.new("Frame")
+            f.Size = UDim2.new(1, -10, 0, 38)
+            f.BackgroundColor3 = Color3.fromRGB(90,0,170)
+            f.Parent = Scroll
+            Instance.new("UICorner", f).CornerRadius = UDim.new(0,10)
+
+            local nameLbl = Instance.new("TextLabel")
+            nameLbl.Size = UDim2.new(0.55,0,1,0)
+            nameLbl.BackgroundTransparency = 1
+            nameLbl.Text = plr.DisplayName
+            nameLbl.TextColor3 = Color3.new(1,1,1)
+            nameLbl.TextScaled = true
+            nameLbl.Parent = f
+
+            local viewBtn = Instance.new("TextButton")
+            viewBtn.Size = UDim2.new(0.2,0,0.8,0)
+            viewBtn.Position = UDim2.new(0.55,5,0.1,0)
+            viewBtn.BackgroundColor3 = Color3.fromRGB(0,200,0)
+            viewBtn.Text = "View"
+            viewBtn.TextScaled = true
+            viewBtn.Parent = f
+            Instance.new("UICorner", viewBtn).CornerRadius = UDim.new(0,8)
+            viewBtn.MouseButton1Click:Connect(function()
+                Camera.CameraSubject = plr.Character:FindFirstChild("Humanoid")
+            end)
+
+            local offBtn = Instance.new("TextButton")
+            offBtn.Size = UDim2.new(0.2,0,0.8,0)
+            offBtn.Position = UDim2.new(0.78,5,0.1,0)
+            offBtn.BackgroundColor3 = Color3.fromRGB(200,0,0)
+            offBtn.Text = "Off"
+            offBtn.TextScaled = true
+            offBtn.Parent = f
+            Instance.new("UICorner", offBtn).CornerRadius = UDim.new(0,8)
+            offBtn.MouseButton1Click:Connect(function()
+                Camera.CameraSubject = LocalPlayer.Character.Humanoid
+            end)
+        end
+    end
+end
+
+Players.PlayerAdded:Connect(UpdatePlayers)
+Players.PlayerRemoving:Connect(UpdatePlayers)
+
+-- === SETTINGS TAB ===
+local SettingTab = Instance.new("Frame")
+SettingTab.Size = UDim2.new(1,0,1,0)
+SettingTab.BackgroundTransparency = 1
+SettingTab.Visible = false
+SettingTab.Parent = Content
+
+local Credit = Instance.new("TextLabel")
+Credit.Size = UDim2.new(1, -30, 1, 0)
+Credit.Position = UDim2.new(0, 15, 0, 0)
+Credit.BackgroundTransparency = 1
+Credit.Text = "Hello Feamz!\nExecutor by Albisky x Ninjastrong.\nJust for entertainment.\nEnjoy!"
+Credit.TextColor3 = Color3.new(1,1,1)
+Credit.TextScaled = true
+Credit.TextWrapped = true
+Credit.Font = Enum.Font.Gotham
+Credit.Parent = SettingTab
+
+-- SWITCH TABS
+local function switch(name)
+    ExeTab.Visible = name=="Exe"
+    ScriptTab.Visible = name=="Script"
+    ViewTab.Visible = name=="View"
+    SettingTab.Visible = name=="Setting"
+
+    for k,v in pairs(TabButtons) do
+        v.BackgroundColor3 = Color3.fromRGB(130,0,220)
+    end
+    TabButtons[name].BackgroundColor3 = Color3.fromRGB(200,0,255)
+
+    if name == "View" then
+        UpdatePlayers()
+    end
+end
+
+for n, b in pairs(TabButtons) do
+    b.MouseButton1Click:Connect(function()
+        switch(n)
+    end)
+end
+
+-- === LOGO + DRAGGABLE ===
+local Logo = Instance.new("ImageButton")
+Logo.Size = UDim2.new(0, 80, 0, 80)
+Logo.Position = UDim2.new(0, 15, 0, 15)
+Logo.BackgroundTransparency = 1
+Logo.Image = "rbxassetid://80154203139304"
+Logo.Visible = false
+Logo.Parent = ScreenGui
+
+local draggingLogo = false
+local dragStartLogo, startPosLogo
+
+Logo.InputBegan:Connect(function(inp)
+    if inp.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingLogo = true
+        dragStartLogo = inp.Position
+        startPosLogo = Logo.Position
+    end
+end)
+
+Logo.InputChanged:Connect(function(inp)
+    if draggingLogo and inp.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = inp.Position - dragStartLogo
+        Logo.Position = UDim2.new(
+            startPosLogo.X.Scale, startPosLogo.X.Offset + delta.X,
+            startPosLogo.Y.Scale, startPosLogo.Y.Offset + delta.Y
+        )
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(inp)
+    if inp.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingLogo = false
+    end
+end)
+
+Logo.MouseButton1Click:Connect(function()
+    Logo.Visible = false
+    TweenService:Create(MainFrame, TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Position = UDim2.new(0.5, -160, 0.5, -180)
+    }):Play()
+end)
+
+-- === FIX: CLOSE → LOGO MUNCUL ===
+CloseBtn.MouseButton1Click:Connect(function()
+    local tween = TweenService:Create(MainFrame, TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+        Position = UDim2.new(0.5, -160, 1.5, 0)
+    })
+
+    tween:Play()
+
+    tween.Completed:Connect(function()
+        Logo.Position = UDim2.new(0, 15, 0, 15)
+        Logo.Visible = true
+    end)
+end)
+
+-- DRAG MAIN GUI
+local dragging = false
+local mousePos, framePos
+
+TitleLabel.InputBegan:Connect(function(inp)
+    if inp.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        mousePos = inp.Position
+        framePos = MainFrame.Position
+    end
+end)
+
+TitleLabel.InputChanged:Connect(function(inp)
+    if dragging and inp.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = inp.Position - mousePos
+        MainFrame.Position = UDim2.new(
+            framePos.X.Scale, framePos.X.Offset + delta.X,
+            framePos.Y.Scale, framePos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(inp)
+    if inp.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+-- ANIM MASUK
+TweenService:Create(MainFrame, TweenInfo.new(0.8, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+    Position = UDim2.new(0.5, -160, 0.5, -180)
+}):Play()
+
+switch("Exe")
+UpdatePlayers()
+
+print("Feamz Hub v1.1 Mini Loaded!")
